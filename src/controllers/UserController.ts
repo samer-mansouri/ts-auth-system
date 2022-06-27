@@ -83,6 +83,29 @@ class UserController {
     });
   }
 
+  public static async logout(req: Request, res: Response): Promise<Response> {
+    
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return res.status(400).json({
+        message: 'Missing required fields'
+      });
+    } else {
+      const isValid = TokenService.isRefreshTokenValid(refreshToken);
+      if (isValid) {
+        await TokenService.deleteRefreshToken(refreshToken);
+        return res.json({
+          message: 'User logged out successfully'
+        });
+      } else {
+        return res.status(400).json({
+          message: 'Invalid refresh token'
+        });
+      }
+    }
+  }
+
 }
 
 

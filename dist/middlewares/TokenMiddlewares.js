@@ -8,7 +8,9 @@ class TokenMiddlewares {
     static isAuthenticated(req, res, next) {
         const accessToken = req.headers.authorization;
         if (!accessToken) {
-            return res.status(401).send('Unauthorized');
+            return res.status(401).send({
+                message: "Unauthorized"
+            });
         }
         else {
             const isValid = TokenService_1.default.isAccessTokenValid(accessToken);
@@ -16,7 +18,9 @@ class TokenMiddlewares {
                 return next();
             }
             else {
-                return res.status(401).send('Unauthorized');
+                return res.status(401).send({
+                    message: 'Unauthorized'
+                });
             }
         }
     }

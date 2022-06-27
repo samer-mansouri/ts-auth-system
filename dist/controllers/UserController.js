@@ -83,5 +83,29 @@ class UserController {
             });
         });
     }
+    static logout(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { refreshToken } = req.body;
+            if (!refreshToken) {
+                return res.status(400).json({
+                    message: 'Missing required fields'
+                });
+            }
+            else {
+                const isValid = TokenService_1.default.isRefreshTokenValid(refreshToken);
+                if (isValid) {
+                    yield TokenService_1.default.deleteRefreshToken(refreshToken);
+                    return res.json({
+                        message: 'User logged out successfully'
+                    });
+                }
+                else {
+                    return res.status(400).json({
+                        message: 'Invalid refresh token'
+                    });
+                }
+            }
+        });
+    }
 }
 exports.default = UserController;
